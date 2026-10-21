@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบบันทึกการซ่อมเครื่องจักร</title>
+<title>ระบบบันทึกการซ่อมเครื่องจักรแผนกหักเม็ด</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -85,7 +85,7 @@ tailwind.config={theme:{extend:{fontFamily:{sans:['Prompt','sans-serif']},colors
             <div><label for="dept" class="lbl">แผนก</label><select id="dept" class="inp"></select><p class="err" id="e-dept"></p></div>
             <div><label for="shift" class="lbl">กะ</label><select id="shift" class="inp"><option value="">-- เลือกกะ --</option><option>A</option><option>B</option></select><p class="err" id="e-shift"></p></div>
             <div><label for="machine-id" class="lbl">รหัสเครื่องจักร</label><input id="machine-id" class="inp uppercase" placeholder="เช่น S019"><div id="chips" class="flex gap-2 flex-wrap mt-2"></div><p class="err" id="e-machine"></p></div>
-            <div><label for="category" class="lbl">สาเหตุ / อาการเสีย</label><select id="category" class="inp"></select><p class="err" id="e-category"></p></div>
+            <div><label for="category" class="lbl">อาการเสีย / ปัญหางาน NG </label><select id="category" class="inp"></select><p class="err" id="e-category"></p></div>
             
           </div>
 
@@ -187,7 +187,7 @@ const EMPLOYEES = {
   'EMP002': { name: 'สมหญิง รักงาน',  dept: 'หักเม็ด', hash: '8fa8015d8fec89ebfcb936d7f1784b4ff6bf22d25269268b68e9da1918c8597a' },
   'EMP003': { name: 'ประเสริฐ มั่นคง', dept: 'หักเม็ด', hash: '1d6fb0344849c17ee2b043e94f7125d1865b9d379c8ad40d1a3f47781a1d329f' }
 };
-const CAUSES = ['เปลี่ยนสายพาน','ติดตะแกรง','เปลี่ยนลูกปืน','งานตัวคู่','หักเม็ดเอียง','งานตัวแตก','อื่นๆ'];
+const CAUSES = ['เปลี่ยนสายพาน','เปลี่ยนลูกปืน','งานตัวคู่','หักเม็ดเอียง','งานตัวแตก','อื่นๆ'];
 
 /*SHA*/
 const K=[],H0=[];
