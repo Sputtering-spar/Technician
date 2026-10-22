@@ -48,7 +48,6 @@ tailwind.config={theme:{extend:{fontFamily:{sans:['Prompt','sans-serif']},colors
       <p class="text-slate-500 pt-1">1) สร้างบรรทัดรหัสผ่านสำหรับรายชื่อ (ใส่ ADMIN เพื่อสร้างแฮชรหัสผู้ดูแลใหม่)</p>
       <input id="h-id" class="inp" placeholder="รหัสพนักงาน เช่น EMP004" autocapitalize="characters">
       <input id="h-name" class="inp" placeholder="ชื่อ นามสกุล">
-      <input id="h-dept" class="inp" placeholder="แผนก เช่น หักเม็ด" value="หักเม็ด">
       <input id="h-pw" class="inp" placeholder="รหัสผ่านที่ต้องการตั้ง">
       <button type="button" id="h-go" class="w-full bg-slate-800 hover:bg-slate-900 text-white py-2 rounded-lg">สร้างบรรทัด</button>
       <textarea id="h-out" readonly rows="3" class="inp text-xs" placeholder="ผลลัพธ์จะแสดงที่นี่ คัดลอกไปวางใน EMPLOYEES"></textarea>
@@ -259,9 +258,8 @@ showTool(); window.addEventListener('hashchange',showTool);
 $('h-go').onclick=()=>{ if(!adminOk()) return;
   const id=$('h-id').value.trim().toUpperCase(), pw=$('h-pw').value;
   const name=$('h-name').value.trim().replace(/\\/g,'\\\\').replace(/'/g,"\\'") || 'ชื่อ นามสกุล';
-  const dept=$('h-dept').value.trim().replace(/\\/g,'\\\\').replace(/'/g,"\\'") || DEPARTMENTS[0];
   if(!id||!pw) return;
-  $('h-out').value=`'${id}': { name: '${name}', dept: '${dept}', hash: '${hashPw(id,pw)}' },` };
+  $('h-out').value=`'${id}': { name: '${name}', dept: '${DEPARTMENTS[0]}', hash: '${hashPw(id,pw)}' },` };
 $('login-form').addEventListener('submit', e=>{
   e.preventDefault();
   const id=$('emp-id').value.trim().toUpperCase(), emp=EMPLOYEES[id], pw=$('emp-pw').value;
