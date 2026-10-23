@@ -215,6 +215,7 @@ function sha256(msg){
 /*END*/
 const hashPw=(id,pw)=>sha256('repairlog:'+id+':'+pw);
 const FORCE_CHANGE_FIRST_LOGIN = false;  // บังคับตั้งรหัสผ่านใหม่เมื่อยังใช้รหัสเริ่มต้น (นับแยกตามเครื่อง)
+const SESSION_MIN = 30;                 // ล็อกอินค้างได้กี่นาที เกินแล้วต้องเข้าสู่ระบบใหม่ (เพราะเวลาซ่อมเสร็จ = เวลาที่เข้าสู่ระบบ)
 const MAX_TRIES = 5, LOCK_MIN = 5;      // ใส่ผิดครบกี่ครั้งถึงล็อก / ล็อกกี่นาที
 const ADMIN_CONTACT = 'หัวหน้าทีม';      // ชื่อ/เบอร์ที่แสดงให้พนักงานที่ลืมรหัสผ่านติดต่อ
 // แฮชรหัสผ่านผู้ดูแล (ตัวอย่างคือ admin1234 เปลี่ยนก่อนใช้จริง) สร้างใหม่ได้โดยใส่รหัสพนักงานเป็น ADMIN ในกล่องผู้ดูแล
@@ -485,9 +486,22 @@ $('r-go').onclick=()=>{
 };
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('modal').classList.contains('hidden')) $('modal-ok').click() });
 
+const EXPIRED_MSG='หมดเวลาการใช้งาน กรุณาเข้าสู่ระบบใหม่หลังซ่อมเสร็จ เพื่อบันทึกเวลาซ่อมเสร็จใหม่';
 const ses=LS.get('session',null);
-if(ses&&ses.at&&EMPLOYEES[ses.id]){ user={id:ses.id,name:EMPLOYEES[ses.id].name}; stamp=ses.at; enter() }
-else if(user&&EMPLOYEES[user.id]){ $('emp-id').value=user.id; showWho() }
+if(ses&&ses.at&&EMPLOYEES[ses.id]&&Date.now()-ses.at<SESSION_MIN*60000){ user={id:ses.id,name:EMPLOYEES[ses.id].name}; stamp=ses.at; enter() }
+else {
+  if(ses) LS.del('session');
+  if(user&&EMPLOYEES[user.id]){ $('emp-id').value=user.id; showWho() }
+  if(ses) $('login-err').textContent=EXPIRED_MSG;
+}
+// ถ้าเปิดค้างไว้จนหมดเวลา (หรือสลับกลับมาที่แอป) ให้เด้งกลับหน้าล็อกอินเอง
+function checkExpire(){
+  if(stamp&&!$('main-view').classList.contains('hidden')&&Date.now()-stamp>=SESSION_MIN*60000){
+    toLogin(); $('login-err').textContent=EXPIRED_MSG;
+  }
+}
+setInterval(checkExpire,30000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkExpire() });
 syncPending().then(()=>{ if(!$('main-view').classList.contains('hidden')) renderList() });
 </script>
 </body>
